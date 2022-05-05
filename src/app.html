@@ -205,6 +205,8 @@
 					icon:'cherry'
 				}
 			],
+			orders:[]  
+			,
 			sidebarVisible:false,
           }
         },
@@ -249,7 +251,7 @@
                     <label>Quantity:</label>
                   </div>
                   <div class="cell">
-                    <input type="number" v-model.number="vege.inventory">
+                    <input @click="cleanPlace" @change="checkValue" v-model.number="vege.inventory" type="number"/>
                   </div>
                 </div>
               </form>
@@ -268,8 +270,18 @@
 		  },
 		  methods : {
 			 addToCart() {
-            	this.vege.quantity += this.vege.inventory
+				if(typeof this.vege.inventory == "string")
+					this.vege.inventory = 0
+				if(this.vege.inventory > 0){
+            		this.vege.quantity += this.vege.inventory
+				}
           	},
+			cleanPlace(){
+				this.vege.inventory = ""
+			},
+			checkValue(){
+		  		this.vege.inventory = (this.vege.inventory < 0) ? 0:this.vege.inventory
+	  		}
 		  }
 	  })
 	app.component('cartproduct',{
@@ -315,7 +327,11 @@
 		  	totalPrice() {
 		  		return (this.vegeside.reduce((pv,cv)=>pv+(cv.quantity*cv.price),0)).toFixed(2)
 	  		},
-			
+		  },
+		  methods:{
+			  checkoutCart(){
+				  this.vegeside.forEach((v)=>v.quantity=0)
+			  }
 		  },
 		  template: `<aside class="cart-container">
 						<div class="cart">
@@ -349,11 +365,11 @@
 							<p v-if="totalPrice==0" class="center"><em>No items in cart</em></p>
 							<div class="spread">
 							  <span><strong>Total:</strong>{{totalPrice}}</span>
-							  <button class="btn btn-light">Checkout</button>
+							  <button @click="checkoutCart" class="btn btn-light">Checkout</button>
 							</div>
 						  </div>
 						</div>
-					 </aside>`,		  
+					 </aside>`,
 	  })
       app.mount('#app')
     </script>
