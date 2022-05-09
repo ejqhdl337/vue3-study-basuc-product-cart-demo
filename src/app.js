@@ -27,8 +27,7 @@
 					icon:'cherry'
 				}
 			],
-			orders:[]  
-			,
+			orders:[] ,
 			sidebarVisible:false,
           }
         },

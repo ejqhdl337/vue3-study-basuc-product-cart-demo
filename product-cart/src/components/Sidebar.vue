@@ -48,7 +48,7 @@
 </template>
 <script>
 export default {
-    props:['toggle','inventory','cart','rmFromCart','checkoutCart'],
+    props:['toggle','inventory','cart','orders','rmFromCart','checkoutCart'],
     methods:{
         getPrice(id) {
             return this.inventory[id-1].price.USD
@@ -62,6 +62,18 @@ export default {
         totalPrice() {
             return (Object.entries(this.cart).reduce((pv,cv)=>pv+(cv[1]*this.getPrice(cv[0])),0)).toFixed(2)
         },
+        checkoutCart(){
+            for(const id in this.cart){
+                this.orders.push({
+                    foodId:id,
+                    price:this.getPrice(id),
+                    icon:this.inventory[id-1].icon,
+                    name:this.getName(id),
+                    quantity:this.cart[id],
+                })
+            }
+            this.checkoutCart()
+        }
     },
 }
 </script>

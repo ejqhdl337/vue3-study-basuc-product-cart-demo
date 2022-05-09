@@ -18,7 +18,7 @@
       </a>
     </nav>
   </header>
-  <router-view :inventory="inventory" :cart="cart"/>
+  <router-view :inventory="inventory" :cart="cart" :orders="orders"/>
 
   <Sidebar v-if="sidebarVisible" 
 		:toggle="toggleSidebar" 
@@ -26,6 +26,7 @@
     :cart="cart"
     :rmFromCart="removeItem"
     :checkoutCart="checkoutCart"
+    :orders="orders"
   />
 </template>
 <script>
@@ -38,7 +39,7 @@ export default {
     return {
       inventory:food,
 			cart:{},
-      orders:{},
+      orders:[],
 			sidebarVisible:false,
     }
   },
@@ -50,7 +51,7 @@ export default {
       delete this.cart[foodId]
     },
     checkoutCart(){
-      this.orders = this.cart
+      delete this.cart
       this.cart = {}
     }
   },
